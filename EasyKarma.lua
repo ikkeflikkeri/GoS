@@ -209,7 +209,6 @@ function EasyKarma:UseE(useE, useRE, useREAllies, useESpellsAlly, useEAttackAlly
     if useE and IsSpellReady(_E) then
         local useR = false
         if useRE and IsSpellReady(_R) then
-
             if useREAllies then
                 if GetAllyCount(1000) > 2 then
                     useR = true
