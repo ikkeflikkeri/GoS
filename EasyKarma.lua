@@ -2,16 +2,6 @@ if myHero.charName ~= "Karma" then return end
 
 require "GGPrediction"
 
-local GG_Target
-local GG_Orbwalker
-local GG_Object
-
-Callback.Add("Load", function()
-	GG_Target = _G.SDK.TargetSelector
-	GG_Orbwalker = _G.SDK.Orbwalker
-	GG_Object = _G.SDK.ObjectManager
-end)
-
 class "EasyKarma"
 
 function EasyKarma:__init()
@@ -163,7 +153,7 @@ function EasyKarma:UseQ(useQ, useRQ, useRQAllies, hitchance)
 		
 		if IsInComboMode() then
 			local qTargets = GetEnemyHeroes(self.spellPredictionQ.Range + 250)
-			local qTarget = GG_Target:GetTarget(qTargets, DAMAGE_TYPE_MAGICAL)
+			local qTarget = _G.SDK.TargetSelector:GetTarget(qTargets, DAMAGE_TYPE_MAGICAL)
 			if IsValidTarget(qTarget) then
 				self.spellPredictionQ:GetPrediction(qTarget, myHero)
 				if self.spellPredictionQ:CanHit(hitchance) and GetCollisionCount(self.spellPredictionQ) < 1 then
@@ -260,15 +250,15 @@ function OnLoad()
 end
 
 function IsInComboMode()
-	return GG_Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_COMBO]
+	return _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_COMBO]
 end
 
 function IsInHarassMode()
-	return GG_Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_HARASS]
+	return _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_HARASS]
 end
 
 function IsInFleeMode()
-	return GG_Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_FLEE]
+	return _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_FLEE]
 end
 
 function IsInAutoMode()
@@ -281,7 +271,7 @@ end
 
 function GetEnemyHeroes(range)
 	local result = {}
-	for i, unit in ipairs(GG_Object:GetEnemyHeroes(false, false, true)) do
+	for i, unit in ipairs(_G.SDK.ObjectManager:GetEnemyHeroes(false, false, true)) do
 		if unit.distance < range then
 			table.insert(result, unit)
 		end
@@ -291,7 +281,7 @@ end
 
 function GetAllyHeroes(range) 
 	local result = {}
-	for i, unit in ipairs(GG_Object:GetAllyHeroes(false, false, true)) do
+	for i, unit in ipairs(_G.SDK.ObjectManager:GetAllyHeroes(false, false, true)) do
 		if unit.distance < range then
 			table.insert(result, unit)
 		end
@@ -301,7 +291,7 @@ end
 
 function GetClosestEnemy(range)
 	local result = nil
-	for i, unit in ipairs(GG_Object:GetEnemyHeroes(false, false, true)) do
+	for i, unit in ipairs(_G.SDK.ObjectManager:GetEnemyHeroes(false, false, true)) do
 		if unit.distance < range and (result == nil or unit.distance < result.distance) then
 			result = unit
 		end
