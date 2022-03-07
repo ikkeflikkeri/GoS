@@ -11,7 +11,7 @@ function EasyKarma:__init()
 	Callback.Add("Tick", function() self:Tick() end)
 	Callback.Add("Draw", function() self:Draw() end)
 
-	PrintChat("EasyKarma v1.0 by ikkeflikkeri Loaded!")
+	PrintChat("EasyKarma v1.1 by ikkeflikkeri Loaded!")
 end
 
 function EasyKarma:Tick()
@@ -188,9 +188,17 @@ end
 
 function EasyKarma:UseW(useW)
 	if useW and IsSpellReady(_W) then
-		local wTarget = GetClosestEnemy(650)
-		if IsValidTarget(wTarget) then
-			Control.CastSpell(HK_W, wTarget)
+		if IsInComboMode() then
+			local qTargets = GetEnemyHeroes(650)
+			local qTarget = _G.SDK.TargetSelector:GetTarget(qTargets, DAMAGE_TYPE_MAGICAL)
+			if IsValidTarget(qTarget) then
+				Control.CastSpell(HK_W, wTarget)
+			end
+		else
+			local wTarget = GetClosestEnemy(650)
+			if IsValidTarget(wTarget) then
+				Control.CastSpell(HK_W, wTarget)
+			end
 		end
 	end
 end
